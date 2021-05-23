@@ -1,0 +1,159 @@
+% $Header$
+
+\documentclass{beamer}
+
+
+\mode<presentation>
+{
+  \usetheme{Boadilla}
+  % or ...
+
+  \usecolortheme{seahorse}
+  \useinnertheme{rectangles}
+  \useoutertheme[hooks]{tree}
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+
+\usepackage{bm}
+\usepackage[english]{babel}
+% or whatever
+
+
+\usepackage[latin1]{inputenc}
+% or whatever
+\usepackage{graphicx}
+\usepackage[super]{nth}
+
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+% \title[\text{Computational Geometry}] % (optional, use only with long paper titles)
+% {CS 424: Joy of Theoretical Computer Science}
+
+\title[Geometric Algorithms]{The Complexity of Geometric Algorithms in 2 \& 3 Dimensions}
+
+\author[Rehman, Ali, Ozair] % (optional, use only with lots of authors)
+{Rehman, M. Usaid \and Ali, Syed Anus \and Ozair, Faraz}
+
+\institute{Habib University} % (optional, but mostly needed)
+\date{\today} % (optional, should be abbreviation of conference name)
+
+\pgfdeclareimage[height=0.5cm]{university-logo}{logo.jpg}
+\logo{\pgfuseimage{university-logo}}
+
+%Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+% \beamerdefaultoverlayspecification{<+->}
+
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor%~~\beamer@ifempty{\insertshortinstitute}{}{(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+\makeatother
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents%[pausesections]
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+
+\section{Introduction to Computational Geometry}
+
+\subsection{Overview}
+\begin{frame}
+  \frametitle{Title}
+\end{frame}
+
+\subsection{History \& Areas of Application}
+\begin{frame}
+  \frametitle{Title}
+\end{frame}
+
+\section{Geometric Preliminaries}
+\subsection{Definitions \& Notation}
+\begin{frame}
+  \frametitle{Title}
+\end{frame}
+
+\section{The Convex Hull Problem}
+\subsection{Introduction}
+\begin{frame}
+  \frametitle{Title}
+\end{frame}
+
+\subsection{Algorithms \& Complexities}
+\begin{frame}
+  \frametitle{Title}
+\end{frame}
+
+
+\section{Orthogonal Range Searching}
+\begin{frame}
+  \frametitle{Title}  
+\end{frame}
+
+% \appendix
+% \section<presentation>*{\appendixname}
+% \subsection<presentation>*{For Further Reading}
+
+% \begin{frame}[allowframebreaks]
+%   \frametitle<presentation>{For Further Reading}
+    
+%   \begin{thebibliography}{10}
+    
+%   \beamertemplatebookbibitems
+%   % Start with overview books.
+
+%   \bibitem{Author1990}
+%     A.~Author.
+%     \newblock {\em Handbook of Everything}.
+%     \newblock Some Press, 1990.
+ 
+    
+%   \beamertemplatearticlebibitems
+%   % Followed by interesting articles. Keep the list short. 
+
+%   \bibitem{Someone2000}
+%     S.~Someone.
+%     \newblock On this and that.
+%     \newblock {\em Journal of This and That}, 2(1):50--100,
+%     2000.
+%   \end{thebibliography}
+% \end{frame}
+
+\end{document}
+
+
