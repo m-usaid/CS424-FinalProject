@@ -27,12 +27,15 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{graphicx} 
-\usepackage{animate}
-\usepackage{movie15}
+% \usepackage{animate}
+% \usepackage{movie15}
 \usepackage{listings}
 \usepackage[super]{nth}
-
+\usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}
+\usepackage{subcaption}
+
+\usepackage{hyperref}
 % Or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
 
@@ -134,21 +137,79 @@
 \subsection{Overview}
 \begin{frame}
   \frametitle{The Paradigm of Computational Geometry}
+  \begin{itemize}
+      \item A sub-field of algorithm theory involving design and analysis of algorithms with geometric input and output. 
+      \vspace{0.5 em}
+      \item Mostly focuses on the discrete aspect of geometric problem solving.
+      \vspace{0.5 em}
+      \item Primarily deals with straight or flat objects or simple curves.
+      \vspace{0.5 em}
+      \item Computational geometry aims to provide basic geometric tools from which application areas can build algorithms. 
+      \vspace{0.5 em}
+      \item It also aims to provides theoretical analytical tools to analyze the 
+      performance of these algorithms.
+  \end{itemize}
 \end{frame}
 
-\subsection{History \& Areas of Application}
+\subsection{History \& Famous Problems}
 \begin{frame}
   \frametitle{A Brief History \& Timeline}
+  \begin{itemize}
+      \item Geometry has been central to mathematics since the time of the Ancient Greeks and the Ancient Egyptians. 
+      \item Euclid's \textit{Elements} had a profound influence on the study of geometry. 
+      \item Introduction of coordinates permitted an increase in computational power. 
+      \item The term "Computational Geometry" was coined first by Marvin Minsky in 
+      his book "Perceptrons" in 1969. 
+      \item Multiple application areas have been the incubation bed for this discipline. 
+      \item These problems include Euclidean traveling salesman, minimum spanning tree, linear programming etc. 
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{Famous Problems \& Their Applications}
-    
+\begin{frame}{Famous Problems in Computational Geometry}
+\begin{columns}[T]
+\begin{column}{.55\textwidth}
+    \begin{enumerate}
+        \item {Convex Hulls} 
+        \item {Intersections} 
+        \item {Voronoi Diagrams and Delaunay Triangulations}
+        \item {Triangulation and Partitioning}
+        \item {Optimization and Liner Programming} 
+        \item {Geometric Search Problems}
+        \begin{itemize}
+            \item Nearest-neighbor searching 
+            \item Point location 
+        \end{itemize}
+    \end{enumerate}
+\end{column}
+\hfill
+\begin{column}{.4\textwidth}
+\begin{tabular}{lll}
+\centering
+    {\scriptsize 1} & {\scriptsize 2} \\
+\includegraphics[width=.35\linewidth,valign=m]{cnvxhull.png} &
+    \includegraphics[width=.3\linewidth,valign=m]{intersect.png} \\
+    {\scriptsize 3}  & {\scriptsize 4}  \\
+ \includegraphics[width=.45\linewidth,valign=m]{voronoi.png} & \includegraphics[width=.3\linewidth,valign=m]{plgntriangu.png} \\
+\end{tabular}
+\end{column}
+\end{columns}
 \end{frame}
 
 \section{Geometric Preliminaries}
 \subsection{Definitions \& Notation}
 \begin{frame}
   \frametitle{Basics of Euclidean Geometry}
+  \begin{itemize}
+      \item The main objects considered in computational geometry are sets of points in Euclidean space. 
+      \item Sets of points are finite, or at least \textit{finitely specifiable}.
+      \item By $E^d$, we denote the $d$-\textit{dimensional Euclidean space}. 
+      \item A $d$-tuple $(x_1,\dots, x_d)$ denotes a point of $E^d$ where $x_i \in \mathbb{R}$. 
+      \item A \emph{polygon} in $E^2$ is defined by a finite set of line segments where
+      each extreme point is shared by exactly two segments called \textit{edges}. 
+      \item A \textit{polyhedron} in $E^3$ is defined by a finite set of plane polygons 
+      such that every edge of a polygon is shared by only one other polygon. 
+      
+  \end{itemize}
 \end{frame}
 
 \section{The Convex Hull Problem}
@@ -187,52 +248,90 @@
 \end{frame}
 
 \subsection{Intuition}
-\begin{frame}
-  \frametitle{A Motivating Example}
-  \begin{itemize}
-  \item Consider the table below with a number of inks and the proportion of pigments in each of them:
-    \begin{table}[]
-    \caption{Primary Ink composition}
-    \begin{tabular}{|l|l|l|}
-    \hline
-          & Pigment A & Pigment B \\ \hline
-    Ink A & 10\%      & 30\%      \\ \hline
-    Ink B & 40\%      & 20\%      \\ \hline
-    Ink C & 20\%      & 5\%       \\ \hline
-    \end{tabular}
-    \end{table}
-  \end{itemize}
-\end{frame}
 
-
-\begin{frame}
-  \frametitle{A Motivating Example}
-  \begin{itemize}
-        \item Now consider the ink D and E and the required pigment proportion in each of them:
-        \begin{table}[]
-        \caption{Desired Ink composition}
-        \begin{tabular}{|l|l|l|}
-        \hline
-              & Pigment A & Pigment B \\ \hline
-        Ink D & 30\%      & 15\%      \\ \hline
-        Ink E & 10\%      & 20\%      \\ \hline
-        \end{tabular}
-        \end{table}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
+\begin{frame}{Mixing Things}
     \begin{itemize}
-        \item Draw a boundary around the points of Inks in first table on a graph with Pigment A \& B as x \& y axis. If Ink D and E lies on the inside of this boundary then they can be prepared using these inks otherwise no.\\
+        \item Imagine you have the following 
+        mixtures of substances:
     \end{itemize}
-    \frametitle{Solution}
-      \begin{center}
-     \begin{figure}[H]
-        \caption{2D Convex Hull}
-        \centering
-        \includegraphics[scale=0.1]{convex_hull_intro.png}
-        \end{figure}
-    \end{center}
+    
+        \begin{table}[h]
+            \centering
+            \scalebox{0.8}{
+            \begin{tabular}{c|c|c}
+                subst. & fract. $A$ & fract. $B$\\ \hline
+                $s_1$ & 10\% & 35\% \\  
+                $s_2$ & 20\% & 5\% \\ 
+                $s_3$ & 40\% & 55\% \\ \hline 
+            \end{tabular}}
+        \end{table}
+    \begin{itemize}
+        \item Using these substances can we create two other substances \\s $q_1$ and $q_2$?
+    \end{itemize}
+    \begin{table}[h]
+            \centering
+            \scalebox{0.8}{
+            \begin{tabular}{c|c|c}
+            \hline 
+                $q_1$ & 25\% & 28\% \\  
+                $q_2$ & 15\% & 15\% \\ \hline 
+            \end{tabular}}
+        \end{table}
+\end{frame}
+
+\begin{frame}[t]{Mixing Things}
+\begin{itemize}
+    \item Let's plot these values:
+\end{itemize}
+\begin{figure}
+    \centering
+\scalebox{0.6}{
+    \begin{tikzpicture}
+      \begin{axis}[
+        grid=major,
+          axis lines = left, 
+          xlabel = $A$, 
+          ylabel = $B$,
+          xmin=0, xmax=0.5,
+          ymin=0, ymax=0.5
+          ]
+          \addplot[
+          fill=red,
+          fill opacity=0.25,
+          color=red,
+          mark=x,
+          mark size=3pt,
+          thick
+          ]
+          coordinates{(0.1,0.35) (0.2, 0.05) (0.4, 0.25)};
+          \addplot[
+          color=red,
+          mark=x
+          mark size=4pt,
+          thick
+          ]
+          coordinates{(0.1,0.35) (0.4, 0.25)};
+          \addplot[
+          color=black,
+          mark=x,
+          only marks, 
+          mark size=3pt,
+          thick
+          ]
+          coordinates{(0.25,0.28) (0.15,0.15)};
+          \node[label={280:{$q_1$}}] at (axis cs:0.25,0.28) {};
+          \node[label={180:{$q_2$}}] at (axis cs:0.15,0.15) {};
+          \node[label={140:{$s_1$}}] at (axis cs:0.1,0.35) {};
+          \node[label={180:{$s_2$}}] at (axis cs:0.2,0.05) {};
+          \node[label={25:{$s_3$}}] at (axis cs:0.4,0.25) {};
+      \end{axis}
+    \end{tikzpicture}}
+    \vspace{-1 em}
+    \end{figure}
+    \begin{itemize}
+        \item We can observe that a substance $q \in \mathbb{R}^2$ can be created using 
+        substances in $S \subset \mathbb{R}^2$ if and only if $q \in$ CH($S$).
+    \end{itemize}
 \end{frame}
 
 \subsection{Problem Definition}
@@ -309,15 +408,8 @@
   \end{itemize}
 \end{frame}
 
-
-% \begin{frame}{Convex Hull in 2D \& 3D}
-  %   \begin{itemize}
-    %       \item The smallest convex polygon in 2D or polytope in 3d which encloses a set of points such that each point in the set lies within the polygon/polytope or on its perimeter/faces.
-    
-    %   \end{itemize}
-    % \end{frame}
-    \section{Convex Hull Algorithms \& Complexity}
-    \subsection{Lower Bound \& Output-Sensitivity}
+\section{Convex Hull Algorithms \& Complexity}
+\subsection{Lower Bound \& Output-Sensitivity}
     \begin{frame}[t]{Lower Bound on Computational Complexity}{Overview and Approach}
     \begin{itemize}
         \item The convex hull problem outputs a polygon -- a cyclic enumeration of the boundary vertices.
@@ -357,7 +449,7 @@
           \item They may be asymptotically more efficient than $\Theta(n\log n)$ algorithms when $h = o(n)$.
           \item The lower bound for these algorithms is $\Omega(n \log h)$ in the planar case. 
           \item Kirkpatrick and Seidel devised an algorithm that achieved this in 1986.
-          \item In 1996, a much simpler algoirthm was devised by Chan called Chan's algorithm.
+          \item In 1996, a much simpler algorithm was devised by Chan called Chan's algorithm.
       \end{itemize}
     \end{frame}
 
@@ -368,78 +460,119 @@
             assumption. 
             \item We assume that the points are in \emph{general position}.
             \item This means that degenerate configurations do not arise in input. 
-            \item Point sets in general position maintain general position if perturbed infinitesimally. 
+            \item Point sets in general position maintain general position if perturbed infinitesimally.
             \item Merely a convenience to avoid dealing with a lot of special cases during algorithm design.
         \end{itemize}
     \end{frame}
 
     \begin{frame}
-      \frametitle{Convex Hull Algorithms}
+      \frametitle[t]{Convex Hull Algorithms}
       \begin{itemize}
-        \item 2 Dimensional
-        \begin{itemize}
-          \item Jarvis March
-          \item Graham's Scan
-        \end{itemize}
-        \item 3 Dimensional 
-        \begin{itemize}
-          \item 
-        \end{itemize}
+        \item There are multiple algorithms that employ different techniques to compute 
+        the convex hull of a point set. 
+        \item Following are some of these algorithms with their time complexity:
       \end{itemize}
+        \begin{table}[h!]
+            \centering
+            \begin{tabular}{|c|c|}
+                \hline 
+                \textbf{Algorithm} & \textbf{Time Complexity}  \\ \hline 
+                Jarvis March  & $O(nh)$ \\ \hline 
+                Graham Scan & $O(n \log n)$ \\ \hline
+                Quickhull & $O(n \log n)$ \\ \hline 
+                Chan's Algorithm & $O(n \log h)$ \\ \hline 
+            \end{tabular}
+            \caption{Some algorithms and their complexities.}
+            \label{tab:my_label}
+        \end{table}
     \end{frame}
     
-    \begin{frame}
-      \frametitle{Jarvis March}
-      \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/jarvis_march_pseu.py}
-    \begin{center}
-      $\mathcal{O}(nh)$
-    \end{center}
-  \end{frame}
-  
-  \begin{frame}{Jarvis March}
-   % \animategraphics[loop,controls,width=\linewidth,height=200pt]{40}{jarvis_march/jarvis_march-}{0}{190}
-  \end{frame}
-  
-  
-  \begin{frame}
-    \frametitle{Graham Scan}
-    \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-    \begin{center}
-      
-      $\mathcal{O}(n log n)$
-    \end{center}
-  \end{frame}
-  
-  \begin{frame}{Graham Scan}
-    % \begin{center}
-      %     \animategraphics[loop,controls,width=250pt,height=150pt]{40}{graham_scan/graham_scan-}{0}{50}
-      % \end{center}
+    \begin{frame}{Jarvis March}{Algorithm Description \& Visualization}
+        \begin{itemize}
+            \item Jarvis march a.k.a the gift wrapping algorithm, was published in 
+            1973 by R. A. Jarvis.
+            \item The algorithm begins with $i\leftarrow0$, and a point $p_0$ known to be on the convex hull. 
+            \item Then it selects the point $p_{i+1}$ such that all points are to the right of the line segment $p_ip_{i+1}$.
+            \item This can be done in $O(n)$ time by comparing polar angles.
+            \item Let $i\leftarrow i+1$, and repeat until algorithm $p_h \leftarrow p_0$ again. 
+            \item This would yield the convex hull in $h$ steps. 
+            \item \href{https://upload.wikimedia.org/wikipedia/commons/9/9c/Animation_depicting_the_gift_wrapping_algorithm.gif}{\color{magenta}{Here is a link to an animation for Jarvis march.}}
+        \end{itemize}
     \end{frame}
+  
+  
+  \begin{frame}{Jarvis March}{Performance \& Time Complexity}
+ \begin{columns}
+\begin{column}{0.48\textwidth}
+    \begin{itemize}
+        \item Jarvis march is among the least efficient algorithms for 
+        convex hull. 
+        \item The algorithm loops $h$ times and within each iteration, it 
+        loops $n$ times.
+        \item Therefore, the time complexity is $O(nh)$.
+    \end{itemize}
+\end{column}
+\begin{column}{0.46\textwidth}
+    \begin{figure}
+    \scalebox{0.75}{
+    \centering
+    \def\svgwidth{\columnwidth}
+    \input{jarvisboy.pdf_tex}}
+    \caption{The Jarvis march procedure.}
+    \end{figure}
+    \end{column}
+    \end{columns}
+  \end{frame}
+  
+ \begin{frame}{Graham Scan}{Algorithm Description \& Visualization}
+    \begin{itemize}
+        \item Based on the \textit{incremental construction} technique.
+        \item In this approach, items are added one at a time, and the structure is updated with each insertion. 
+        \item First, select the lowest point in the point set called point $P$.
+        \item Sort all points cyclically w.r.t point $P$ and the $x$-axis.
+        \item 
+    \end{itemize}
+ \end{frame}
+  
+%   \begin{frame}
+%     \frametitle{Graham Scan}
+%     \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
+%     \begin{center}
+      
+%       $\mathcal{O}(n log n)$
+%     \end{center}
+%   \end{frame}
+  
+%   \begin{frame}{Graham Scan}
+%     % \begin{center}
+%       %     \animategraphics[loop,controls,width=250pt,height=150pt]{40}{graham_scan/graham_scan-}{0}{50}
+%       % \end{center}
+%     \end{frame}
     
     
-    \begin{frame}
-      \frametitle{Chan's Algorithm}
-      \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-      \begin{center}
-        $\mathcal{O}(n log n)$
-      \end{center}
-    \end{frame}
+    % \begin{frame}
+    %   \frametitle{Chan's Algorithm}
+    %   \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
+    %   \begin{center}
+    %     $\mathcal{O}(n log n)$
+    %   \end{center}
+    % \end{frame}
     
-    \begin{frame}{Chan's Algorithm}
-      % \begin{center}
-        %       \animategraphics[loop,controls,width=250pt,height=150pt]{40}{chan_algo/chan_algo-}{0}{50}
-        % \end{center}
-      \end{frame}
+    % \begin{frame}{Chan's Algorithm}
+    %   % \begin{center}
+    %     %       \animategraphics[loop,controls,width=250pt,height=150pt]{40}{chan_algo/chan_algo-}{0}{50}
+    %     % \end{center}
+    %   \end{frame}
       
       
-      \begin{frame}
-        \frametitle{Jarvis March in 3D}
-        \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-        \begin{center}
+    %   \begin{frame}
+    %     \frametitle{Jarvis March in 3D}
+    %     \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
+    %     \begin{center}
           
-          $\mathcal{O}(n log n)$
-        \end{center}
-      \end{frame}
+    %       $\mathcal{O}(n log n)$
+    %     \end{center}
+    %   \end{frame}
       
       % \appendix
       % \section<presentation>*{\appendixname}
