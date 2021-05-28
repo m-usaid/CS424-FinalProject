@@ -20,7 +20,7 @@
 \usepackage[english]{babel}
 % or whatever
 
-
+\usepackage{subcaption}
 \usepackage[latin1]{inputenc}
 % or whatever
 \usepackage{graphicx}
@@ -261,7 +261,53 @@
     \end{itemize}    
 \end{frame}
 
-
+\begin{frame}[t]
+  \frametitle{Convex Hull for Finite Set of Points}
+    \begin{itemize}
+      \item The convex hull for a finite set of points in the plane produces a convex polygon. 
+    \end{itemize}
+    \begin{figure}
+      \centering
+      \begin{subfigure}{0.35\textwidth}
+        \centering
+        \begin{tikzpicture}
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (A) at (0,0) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (B) at (0,1) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (C) at (0.64,0.95) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (D) at (-0.6,0.7) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (E) at (-1,0.9) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (F) at (0.6,-0.5) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (G) at (-0.8,-0.4) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (H) at (-0.4,-0.1) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (I) at (0.25,0.5) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (J) at (-0.15,0.43) {};
+          \node at (1, 1.25) {$P$};
+        \end{tikzpicture}
+      \end{subfigure}
+      \begin{subfigure}{0.35\textwidth}
+        \centering 
+        \begin{tikzpicture}
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (A) at (0,0) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (B) at (0,1) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (C) at (0.64,0.95) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (D) at (-0.6,0.7) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (E) at (-1,0.9) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (F) at (0.6,-0.5) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (G) at (-0.8,-0.4) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (H) at (-0.4,-0.1) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (I) at (0.25,0.5) {};
+          \node[circle, fill=black,inner sep=0pt,minimum size=2pt] (J) at (-0.15,0.43) {};
+          \node at (1.25, 1.25) {CH($P$)};
+          \shadedraw[] (B) -- (C) -- (F) -- (G) -- (E) -- (B);
+        \end{tikzpicture}
+      \end{subfigure}
+      \caption{A point set and its convex hull.}
+    \end{figure}
+    \begin{itemize}
+    \item In 3 dimensions however, the convex hull is not a convex polygon, but instead a 
+    convex polyhedron -- generalizes to a polytope in higher dimensions.
+  \end{itemize}
+\end{frame}
 
 
 % \begin{frame}{Convex Hull in 2D \& 3D}
