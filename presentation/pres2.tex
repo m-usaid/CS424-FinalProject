@@ -318,17 +318,59 @@
     % \end{frame}
     \section{Convex Hull Algorithms \& Complexity}
     \subsection{Lower Bound \& Output-Sensitivity}
-    \begin{frame}{Lower Bound on Computational Complexity}
-          
+    \begin{frame}[t]{Lower Bound on Computational Complexity}{Overview and Approach}
+    \begin{itemize}
+        \item The convex hull problem outputs a polygon -- a cyclic enumeration of the boundary vertices.
+        \item We can say that we have to produce a sorting of the vertices.
+        which has a lower bound of $\Omega(n\log n)$.
+        \item To find lower bound of convex hull problem, we will reduce the sorting problem to the 
+        convex hull problem in $O(n)$ time, which implies:
+    \end{itemize}  
+    \begin{theorem}
+    Any algorithm for the convex hull problem requires $\Omega(n\log n)$ time in the worst case.
+    \end{theorem}
+    \end{frame}
+    
+    \begin{frame}[t]{Lower Bound on Computational Complexity}
+    {Reduction of Sorting to Convex Hull}
+\begin{itemize}
+    \item Let $X = \{x_1, \dots, x_n\}$ be the $n$ values we wish to sort.
+    \item We can "lift" each of these points onto a parabola $y=x^2$, by mapping $x_i$ to the point 
+    $p_i=(x_i,x_i^2)$.
+    \item $P$ is the resulting set of points -- all of which lie on the convex hull.
+    \item The sorted order of points along the lower hull is the same as the sorted order $X$.
+    \end{itemize}    
+   \begin{figure}
+       \centering
+       \includegraphics[width=0.63\textwidth]{lowerbound.png}
+       \vspace{-0.75 em}
+       \caption{Reduction from sorting to convex hull.}
+   \end{figure}
     \end{frame}
 
     \begin{frame}
       \frametitle{Output-Sensitive Algorithms}
+      \begin{itemize}
+          \item Some convex hull algorithms depend both on $n$ input points, 
+          and $h$ output points. 
+          \item Such algorithms are called \textit{output-sensitive} algorithms.
+          \item They may be asymptotically more efficient than $\Theta(n\log n)$ algorithms when $h = o(n)$.
+          \item The lower bound for these algorithms is $\Omega(n \log h)$ in the planar case. 
+          \item Kirkpatrick and Seidel devised an algorithm that achieved this in 1986.
+          \item In 1996, a much simpler algoirthm was devised by Chan called Chan's algorithm.
+      \end{itemize}
     \end{frame}
 
     \subsection{Algorithms}
-    \begin{frame}{General Position}
-      
+    \begin{frame}{The General Position Assumption}
+        \begin{itemize}
+            \item Before we look at algorithms, let's look at an important 
+            assumption. 
+            \item We assume that the points are in \emph{general position}.
+            \item This means that degenerate configurations do not arise in input. 
+            \item Point sets in general position maintain general position if perturbed infinitesimally. 
+            \item Merely a convenience to avoid dealing with a lot of special cases during algorithm design.
+        \end{itemize}
     \end{frame}
 
     \begin{frame}
@@ -355,7 +397,7 @@
   \end{frame}
   
   \begin{frame}{Jarvis March}
-    \animategraphics[loop,controls,width=\linewidth,height=200pt]{40}{jarvis_march/jarvis_march-}{0}{190}
+   % \animategraphics[loop,controls,width=\linewidth,height=200pt]{40}{jarvis_march/jarvis_march-}{0}{190}
   \end{frame}
   
   
