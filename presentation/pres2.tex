@@ -34,7 +34,7 @@
 \usepackage[export]{adjustbox}
 \usepackage[T1]{fontenc}
 \usepackage{subcaption}
-
+\usepackage[ruled, linesnumbered, noend]{algorithm2e}
 \usepackage{hyperref}
 % Or whatever. Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
@@ -213,7 +213,7 @@
 \end{frame}
 
 \section{The Convex Hull Problem}
-\subsection{Introduction}
+\subsection{Introduction \& Intuition}
 
 \begin{frame}{What is a Convex Hull?}
     \begin{itemize}
@@ -246,8 +246,6 @@
         Given an arbitrary subset of $L$ of points in $E^d$, the \emph{convex hull} conv(L) of $L$ is the smallest convex set containing $L$. 
     \end{definition}
 \end{frame}
-
-\subsection{Intuition}
 
 \begin{frame}{Mixing Things}
     \begin{itemize}
@@ -524,84 +522,184 @@
     \end{columns}
   \end{frame}
   
- \begin{frame}{Graham Scan}{Algorithm Description \& Visualization}
+ \begin{frame}[t]{Graham Scan}{Algorithm Description \& Visualization}
     \begin{itemize}
         \item Based on the \textit{incremental construction} technique.
-        \item In this approach, items are added one at a time, and the structure is updated with each insertion. 
-        \item First, select the lowest point in the point set called point $P$.
-        \item Sort all points cyclically w.r.t point $P$ and the $x$-axis.
-        \item 
+        \item First, select the lowest point in the point set $P$ called point $p_0$.
+        \item Sort all points cyclically w.r.t point $p_0$ based on polar angles.
+        \item For each point, determine if travelling to that point constitutes a left turn or a right turn.
+        \item If right turn: second-to-last point is not part of CH($P$) but lies inside.
+        \item Do the same for previously visited points until 'left-turn set' is encountered.
+        \item Repeat until starting point is reached in a counter-clockwise fashion. 
+        \item \href{https://upload.wikimedia.org/wikipedia/commons/7/71/GrahamScanDemo.gif}
+        {\color{magenta}{Link to visualization.}}
     \end{itemize}
  \end{frame}
   
-%   \begin{frame}
-%     \frametitle{Graham Scan}
-%     \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-%     \begin{center}
-      
-%       $\mathcal{O}(n log n)$
-%     \end{center}
-%   \end{frame}
-  
-%   \begin{frame}{Graham Scan}
-%     % \begin{center}
-%       %     \animategraphics[loop,controls,width=250pt,height=150pt]{40}{graham_scan/graham_scan-}{0}{50}
-%       % \end{center}
-%     \end{frame}
+\begin{frame}{Graham Scan}{Pseudocode}
+\begin{center}
+\scalebox{0.75}{
+    \begin{algorithm}[H]
+    \caption{GRAHAM SCAN}
+    \KwIn{A point set $P$}
+    \KwOut{The convex hull of $P$, CH($P$)}
+    let $p_0$ be the minimum and left-most point in $P$ \\ 
+    let $\langle p_1, p_2, \dots, p_n \rangle$ be the remaining points in $P$ sorted by polar angle in counterclockwise order around $p_0$ \\
+    let $S$ be an empty stack \\
+    PUSH($p_0, s)$ \\
+    PUSH($p_1, S)$ \\
+    PUSH ($p_2, S)$ \\ 
+    \For{$i \leftarrow 3$ to $i \leftarrow n$}{
+        \While{the angle formed by points TOP($S$) NEXT\_TO\_TOP($S$), and $p_i$ make a non-left turn}{
+        POP($S$)
+        }
+        PUSH($p_i, S$)
+    }
+    \Return $S$
+    \end{algorithm}
+}
+\end{center}
+\end{frame}
+ 
+\begin{frame}{Graham Scan}{Performance \& Time Complexity}
+    \begin{itemize}
+        \item Graham Scan is an efficient algorithm compared to Jarvis march.
+        \vspace{0.25 em}
+        \item The sorting procedure is done in $O(n \log n)$ time. 
+        \vspace{0.25 em}
+        \item The loop is $O(n)$ and not $O(n^2)$.
+        \vspace{0.25 em}
+        \item We visit each point at most twice -- once as a left turn and once as a right turn. 
+        \vspace{0.25 em}
+        \item The time to sort dominates the time complexity of the algorithm. 
+        \vspace{0.25 em}
+        \item Therefore, Graham scan is $O(n \log n)$.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Quickhull Algorithm}{The Philosophy Behind the Algorithm}
+    \begin{itemize}
+        \item The Quickhull algorithm is a divide-and-conquer algorithm. 
+        \vspace{0.5 em}
+        \item It is based on the strategy of triangular expansion. 
+        \vspace{0.5 em}
+        \item It is also used for computing convex hull in higher dimensions due to its efficiency. 
+        \vspace{0.5 em}
+        \item Quickhull also uses the prune-and-search approach, where the input size 
+        is reduced by a constant factor at each step. 
+        \vspace{0.5 em}
+        \item Its working can be visualized \href{https://upload.wikimedia.org/wikipedia/commons/4/42/Animation_depicting_the_quickhull_algorithm.gif}{\color{magenta}{here}}.
+    \end{itemize}
+\end{frame} 
+
+\begin{frame}[t]{Quickhull Algorithm}{Pseudocode for 2-Dimensional Quickhull}
+\begin{enumerate}
+    \item Find the points with minimum and maximum $x$-coordinates. 
+    \item Use the line formed by the two points to divide the set into two subsets of points. 
+    \item Determine the point, on one side of the line, with the maximum distance from the line --- forms a triangle with those of the line. 
+    \item The points lying inside of that triangle cannot be part of the convex hull and can be ignored in later steps. 
+    \item Repeat the previous two steps on the lines formed by the triangle (recursion). 
+    \item Keep on doing so until no points are left. The points selected constitute the convex hull.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Quickhull Algorithm}{Visualization of Algorithm}
+    \begin{figure}
+    \begin{subfigure}{0.45\textwidth}
+    \centering
+    \scalebox{0.5}{
+    \def\svgwidth{\columnwidth}
+    \input{quickhull1.pdf_tex}}
+    \caption{\footnotesize Steps 1 -- 2}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+    \centering
+    \scalebox{0.5}{
+    \def\svgwidth{\columnwidth}
+    \input{quickhull2.pdf_tex}}
+    \caption{\footnotesize Steps 3 -- 5}
+    \end{subfigure}
+    \vfill 
+    \begin{subfigure}[b!]{0.45\textwidth}
+    \centering
+    \scalebox{0.5}{
+    \def\svgwidth{\columnwidth}
+    \input{quickhull3.pdf_tex}}
+    \caption{Step 6}
+    \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Quickhull Algorithm}{Performance \& Time Complexity}
+    \begin{itemize}
+        \item Finding the extreme points is an $O(n)$ operation.
+        \item Quickhull divides into two sub-problems. 
+        \item In the best case, the partition size is well-balanced:
+        \[T(n) = 2 T(n/2) + O(n)\]
+        \[T(n) = O(n \log n)\]
+        \item Whereas, in the worst case this degenerates to $T(n) = n T(n-1) + cn$,
+        which means the worst case is quadratic. 
+    \end{itemize}
+\end{frame}
+
+\section{3D-Convex Hulls \& More}
+\subsection*{Introduction}
+\begin{frame}{The 3D Convex Hull Problem}
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+    \begin{itemize}
+        \item Recall that in 3 dimensions, the convex hull is a polyhedron (3-polytope). 
+        \item In this case, we are concerned with the \textit{facets} of a polytope.
+        \item The convex polytope is the convex hull of all its vertices. 
+        \item More complicated problem which is harder to visualize and implement. 
+    \end{itemize}
+\end{column}
+\hfill
+\begin{column}{0.4\textwidth}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{3dhull.png}
+        \caption{A 3-dimensional convex hull.}
+    \end{figure}
+\end{column}
+\end{columns}
+\end{frame}
+
+\subsection*{Algorithms for 3D Convex Hulls}
+\begin{frame}{The Gift-Wrapping Algorithm}
+    \begin{itemize}
+        \item The most famous and the simplest algorithm is the 
+        gift wrapping algorithm. 
+        \item 
+    \end{itemize} 
+\end{frame}
+
+\begin{frame}{Other Approaches}
     
-    
-    % \begin{frame}
-    %   \frametitle{Chan's Algorithm}
-    %   \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-    %   \begin{center}
-    %     $\mathcal{O}(n log n)$
-    %   \end{center}
-    % \end{frame}
-    
-    % \begin{frame}{Chan's Algorithm}
-    %   % \begin{center}
-    %     %       \animategraphics[loop,controls,width=250pt,height=150pt]{40}{chan_algo/chan_algo-}{0}{50}
-    %     % \end{center}
-    %   \end{frame}
-      
-      
-    %   \begin{frame}
-    %     \frametitle{Jarvis March in 3D}
-    %     \lstinputlisting[language=Python,basicstyle=\tiny]{pseudocode/graham_scan_pseu.py}
-    %     \begin{center}
+\end{frame}
+
+\section*{References}
+\begin{frame}{References}
+          \begin{thebibliography}{10}
           
-    %       $\mathcal{O}(n log n)$
-    %     \end{center}
-    %   \end{frame}
-      
-      % \appendix
-      % \section<presentation>*{\appendixname}
-      % \subsection<presentation>*{For Further Reading}
-      
-      % \begin{frame}[allowframebreaks]
-        %   \frametitle<presentation>{For Further Reading}
-        
-        %   \begin{thebibliography}{10}
-          
-          %   \beamertemplatebookbibitems
+             \beamertemplatebookbibitems
           %   % Start with overview books.
           
-          %   \bibitem{Author1990}
-          %     A.~Author.
-          %     \newblock {\em Handbook of Everything}.
-%     \newblock Some Press, 1990.
- 
-    
-%   \beamertemplatearticlebibitems
-%   % Followed by interesting articles. Keep the list short. 
+             \bibitem{Author1990}
+               A.~Author.
+               \newblock {\em Handbook of Everything}.
+    \newblock Some Press, 1990.
 
-%   \bibitem{Someone2000}
-%     S.~Someone.
-%     \newblock On this and that.
-%     \newblock {\em Journal of This and That}, 2(1):50--100,
-%     2000.
-%   \end{thebibliography}
-% \end{frame}
+  \beamertemplatearticlebibitems
+  % Followed by interesting articles. Keep the list short. 
+  
+  \bibitem{Someone2000}
+    S.~Someone.
+    \newblock On this and that.
+    \newblock {\em Journal of This and That}, 2(1):50--100,
+    2000.
+  \end{thebibliography}
+\end{frame}
 
 \end{document}
 
